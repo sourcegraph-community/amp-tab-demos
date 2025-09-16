@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amp Tab AI Completion Demos</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-text { background: linear-gradient(to right, #4f46e5, #7c3aed); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        video { border-radius: 12px; box-shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1); }
+        .card { transition: transform 0.2s, box-shadow 0.2s; }
+        .card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px -8px rgb(0 0 0 / 0.15); }
+        .btn { transition: all 0.2s; }
+        .btn:hover { transform: translateY(-1px); }
+        .tag-deletion { background: rgb(254 242 242); color: rgb(185 28 28); }
+        .tag-long-range-edits { background: rgb(239 246 255); color: rgb(29 78 216); }
+        .tag-completion { background: rgb(240 253 244); color: rgb(22 163 74); }
+        .tag-refactoring { background: rgb(255 251 235); color: rgb(202 138 4); }
+        .tag-debugging { background: rgb(250 245 255); color: rgb(147 51 234); }
+
+    </style>
+</head>
+<body class="bg-gradient-to-br from-slate-50 to-indigo-50">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-indigo-600 to-purple-600 text-white py-12">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <h1 class="text-3xl font-bold">Amp Tab Demos</h1>
+        </div>
+    </header>
+
+    <!-- Demo Grid -->
+    <main class="max-w-7xl mx-auto px-6 py-16">
+        <div id="demo-grid" class="space-y-12">
+            <!-- Demos will be loaded here -->
+        </div>
+    </main>
+
+
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="max-w-7xl mx-auto px-6 text-center">
+            <p class="text-gray-400">
+                &copy; 2025 Sourcegraph. 
+                <a href="https://github.com/sourcegraph-community/amp-tab-demos" 
+                   class="text-indigo-400 hover:text-indigo-300 transition-colors">
+                    View Source
+                </a>
+            </p>
+        </div>
+    </footer>
+
+    <script>
+        // Embedded demos data (no external fetch needed)
+        const DEMOS_DATA = {
+            "demos": [
+                {
+                    "id": "delete-interface-fields",
+                    "title": "Delete Interface Fields",
+                    "description": "Demonstrates AI-assisted deletion and long-range editing across interface definitions in TypeScript code.",
+                    "tags": ["deletion", "long-range-edits"],
+                    "videos": {
+                        "amp": "demos/delete-interface-fields/amp_tab.mp4",
+                        "cursor": "demos/delete-interface-fields/cursor_tab.mp4"
+                    },
+                    "reproduction": {
+                        "repo": "https://github.com/sourcegraph/amp",
+                        "commit": "94f5e9a1c9ef6ad6f77d6f889e8bf6510180b7b6",
+                        "file": "vscode/src/autoedit/context/retrievers/diagnostics-retriever.ts"
+                    }
+                },
+                {
+                    "id": "delete-proxy-variable", 
+                    "title": "Delete Proxy Variable",
+                    "description": "Shows AI completion behavior when removing proxy variables and updating related code structures in Go.",
+                    "tags": ["deletion"],
+                    "videos": {
+                        "amp": "demos/delete-proxy-variable/amp_tab.mp4",
+                        "cursor": "demos/delete-proxy-variable/cursor_tab.mp4"
+                    },
+                    "reproduction": {
+                        "repo": "https://github.com/sourcegraph/src-cli",
+                        "commit": "f454b2c46697d3249a9eadcbcb2d3fe98f72a078", 
+                        "file": "cmd/src/main.go"
+                    }
+                }
+            ]
+        };
+
+        // Load and render demos
+        function loadDemos() {
+            try {
+                const grid = document.getElementById('demo-grid');
+                
+                DEMOS_DATA.demos.forEach((demo, index) => {
+                    const demoHTML = createDemoHTML(demo, index);
+                    grid.innerHTML += demoHTML;
+                });
+
+            } catch (error) {
+                console.error('Error loading demos:', error);
+                document.getElementById('demo-grid').innerHTML = `
+                    <div class="text-center py-16">
+                        <div class="text-6xl mb-4">🎬</div>
+                        <h3 class="text-xl font-semibold text-gray-900 mb-2">No demos found</h3>
+                        <p class="text-gray-600">Add demo videos to get started</p>
+                    </div>
+                `;
+            }
+        }
+
+        function createDemoHTML(demo, index) {
+            const tags = demo.tags.map(tag => 
+                `<span class="tag-${tag.replace(/[^a-z]/gi, '-')} px-3 py-1 rounded-full text-xs font-medium">${tag}</span>`
+            ).join(' ');
+
+            return `
+                <div class="card bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
+                    <!-- Demo Header -->
+                    <div class="p-6 pb-4">
+                        <h2 class="text-xl font-bold text-gray-900 mb-3">${demo.title}</h2>
+                        <div class="flex flex-wrap gap-2">${tags}</div>
+                    </div>
+
+                    <!-- Video Comparison -->
+                    <div class="grid md:grid-cols-2 gap-0">
+                        <!-- Amp Tab -->
+                        <div class="p-6">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-3 text-center">Amp Tab</h3>
+                            <div class="aspect-video bg-gray-100 rounded-lg overflow-hidden">
+                                <video id="amp-${index}" 
+                                       controls 
+                                       preload="metadata"
+                                       class="w-full h-full object-cover">
+                                    <source src="${demo.videos.amp}" type="video/mp4">
+                                    Your browser does not support video.
+                                </video>
+                            </div>
+                        </div>
+
+                        <!-- Competitor -->
+                        <div class="p-6 border-l border-gray-100">
+                            <h3 class="text-lg font-semibold text-gray-900 mb-3 text-center">Cursor Tab</h3>
+                            <div class="aspect-video bg-gray-100 rounded-lg overflow-hidden">
+                                <video id="cursor-${index}" 
+                                       controls 
+                                       preload="metadata"
+                                       class="w-full h-full object-cover">
+                                    <source src="${demo.videos.cursor}" type="video/mp4">
+                                    Your browser does not support video.
+                                </video>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Reproduction Steps -->
+                    ${demo.reproduction ? `
+                    <div class="p-8 pt-4 border-t border-gray-100 bg-gray-50">
+                        <h4 class="font-semibold text-gray-900 mb-3">🔄 Reproduction Steps</h4>
+                        <div class="space-y-2 text-sm">
+                            <div><span class="font-medium">Repository:</span> 
+                                <a href="${demo.reproduction.repo}" target="_blank" 
+                                   class="text-indigo-600 hover:text-indigo-700 underline">${demo.reproduction.repo}</a>
+                            </div>
+                            <div><span class="font-medium">Commit:</span> 
+                                <code class="bg-white px-2 py-1 rounded font-mono text-xs">${demo.reproduction.commit}</code>
+                            </div>
+                            <div><span class="font-medium">File:</span> 
+                                <code class="bg-white px-2 py-1 rounded font-mono text-xs">${demo.reproduction.file}</code>
+                            </div>
+                        </div>
+                    </div>
+                    ` : ''}
+                </div>
+            `;
+        }
+
+
+
+        // Load demos when page loads
+        document.addEventListener('DOMContentLoaded', loadDemos);
+    </script>
+</body>
+</html>
