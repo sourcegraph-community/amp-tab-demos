@@ -18,13 +18,28 @@ amp-tab-demos/
 └── README.md                       # This file
 ```
 
-## Converting Videos to GIFs (for README display)
+## Setup
 
-**Prerequisites (macOS):**
+This repository uses Git LFS for large video and GIF files.
+
+**Prerequisites:**
 ```bash
-# Install ffmpeg and bc (for calculations)
+# Install Git LFS (required for cloning large files)
+brew install git-lfs
+git lfs install
+
+# Install ffmpeg and bc (for GIF conversion)
 brew install ffmpeg bc
 ```
+
+**Cloning the repository:**
+```bash
+git clone https://github.com/sourcegraph-community/amp-tab-demos.git
+cd amp-tab-demos
+git lfs pull  # Downloads the actual video/GIF files
+```
+
+## Converting Videos to GIFs (for README display)
 
 **Usage:**
 ```bash
