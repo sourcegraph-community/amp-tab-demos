@@ -12,10 +12,6 @@
 ### Cursor Tab
 ![Cursor Tab Demo](cursor_tab_2.0x.gif)
 
-**Source Files:**
-- `amp_tab.mp4` - Original Amp Tab demonstration
-- `cursor_tab.mp4` - Original Cursor Tab demonstration
-
 ## How to Reproduce
 
 1. Go to https://github.com/sourcegraph/amp
