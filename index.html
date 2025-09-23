@@ -16,7 +16,7 @@
         .btn:hover { transform: translateY(-1px); }
         .tag-deletion { background: rgb(254 242 242); color: rgb(185 28 28); }
         .tag-long-range-edits { background: rgb(239 246 255); color: rgb(29 78 216); }
-        .tag-completion { background: rgb(240 253 244); color: rgb(22 163 74); }
+        .tag-import { background: rgb(240 253 244); color: rgb(22 163 74); }
         .tag-refactoring { background: rgb(255 251 235); color: rgb(202 138 4); }
         .tag-debugging { background: rgb(250 245 255); color: rgb(147 51 234); }
 
@@ -85,6 +85,26 @@
                         "commit": "f454b2c46697d3249a9eadcbcb2d3fe98f72a078", 
                         "file": "cmd/src/main.go"
                     }
+                },
+                {
+                    "id": "if-else-to-switch",
+                    "title": "If-Else to Switch Conversion",
+                    "description": "Demonstrates AI-assisted refactoring of if-else chains to switch statements in TypeScript code.",
+                    "tags": ["refactoring"],
+                    "videos": {
+                        "amp": "demos/if-else-to-switch/amp_tab.mp4",
+                        "cursor": "demos/if-else-to-switch/cursor_tab.mp4"
+                    }
+                },
+                {
+                    "id": "auto-import-typescript",
+                    "title": "Auto Import TypeScript",
+                    "description": "Demonstrates AI-assisted auto import functionality when working with TypeScript files, showing how imports are suggested and applied automatically.",
+                    "tags": ["import"],
+                    "videos": {
+                        "amp": "demos/auto-import-typescript/amp_tab.mp4",
+                        "cursor": "demos/auto-import-typescript/cursor_tab.mp4"
+                    }
                 }
             ]
         };
@@ -119,21 +139,23 @@
             return `
                 <div class="card bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
                     <!-- Demo Header -->
-                    <div class="p-6 pb-4">
-                        <h2 class="text-xl font-bold text-gray-900 mb-3">${demo.title}</h2>
-                        <div class="flex flex-wrap gap-2">${tags}</div>
+                    <div class="px-6 pt-6 pb-4">
+                        <div class="flex flex-wrap items-center justify-between gap-3">
+                            <h2 class="text-xl font-bold text-gray-900">${demo.title}</h2>
+                            <div class="flex flex-wrap gap-2">${tags}</div>
+                        </div>
                     </div>
 
                     <!-- Video Comparison -->
                     <div class="grid md:grid-cols-2 gap-0">
                         <!-- Amp Tab -->
-                        <div class="p-6">
+                        <div class="px-6 pb-6">
                             <h3 class="text-lg font-semibold text-gray-900 mb-3 text-center">Amp Tab</h3>
                             <div class="aspect-video bg-gray-100 rounded-lg overflow-hidden">
                                 <video id="amp-${index}" 
                                        controls 
                                        preload="metadata"
-                                       class="w-full h-full object-cover">
+                                       class="w-full h-full object-contain">
                                     <source src="${demo.videos.amp}" type="video/mp4">
                                     Your browser does not support video.
                                 </video>
@@ -141,13 +163,13 @@
                         </div>
 
                         <!-- Competitor -->
-                        <div class="p-6 border-l border-gray-100">
+                        <div class="px-6 pb-6 border-l border-gray-100">
                             <h3 class="text-lg font-semibold text-gray-900 mb-3 text-center">Cursor Tab</h3>
                             <div class="aspect-video bg-gray-100 rounded-lg overflow-hidden">
                                 <video id="cursor-${index}" 
                                        controls 
                                        preload="metadata"
-                                       class="w-full h-full object-cover">
+                                       class="w-full h-full object-contain">
                                     <source src="${demo.videos.cursor}" type="video/mp4">
                                     Your browser does not support video.
                                 </video>
